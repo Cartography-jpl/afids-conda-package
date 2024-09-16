@@ -1,0 +1,8 @@
+This is Joe's own editor, which doesn't happen to have a conda package.
+This is Tom's preferred editor, so we want to install this as part of afids.
+
+Note that the default joe editor internally does funny (but perfectly legal)
+things with it's hard coded path to the joerc file. We have a patch that
+rearranges this slightly in a way that conda can support updating the path
+when it installs. Without this patch, a conda install can't find its joerc file.
+

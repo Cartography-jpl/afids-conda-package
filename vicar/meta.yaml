@@ -1,0 +1,37 @@
+{% set name = "vicar" %}
+{% set version = "1.13.1" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  git_url: https://github.com/Cartography-jpl/{{ name }}.git
+  git_rev: {{ version }}
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - ncurses
+    - vicar-rtl
+  run:
+    - ncurses
+    - vicar-rtl
+
+about:
+  license: BSD
+  license_file: ../LICENSE
+  summary: This is the VICAR p2 programs, along with the taetm (the VICAR shell).
+

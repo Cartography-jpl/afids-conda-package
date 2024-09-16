@@ -1,0 +1,180 @@
+diff -Naur joe-4.6-original/joe/charmap.c joe-4.6/joe/charmap.c
+--- joe-4.6-original/joe/charmap.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/charmap.c	2022-09-19 12:35:16.894307155 -0700
+@@ -1359,6 +1359,7 @@
+ 	struct builtin_charmap *b;
+ 	FILE *f;
+ 	int y;
++	const char* joe_data = JOEDATA;
+ 
+ 	if (!name || !name[0])
+ 		return 0;
+@@ -1389,7 +1390,7 @@
+ 
+ 	/* Check JOERCcharmaps */
+ 	if (!f) {
+-		joe_snprintf_2(buf,SIZEOF(buf),"%scharmaps/%s",JOEDATA,name);
++		joe_snprintf_2(buf,SIZEOF(buf),"%scharmaps/%s",joe_data,name);
+ 		f = fopen(buf,"r");
+ 	}
+ 
+diff -Naur joe-4.6-original/joe/colors.c joe-4.6/joe/colors.c
+--- joe-4.6-original/joe/colors.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/colors.c	2022-09-19 12:35:55.992462043 -0700
+@@ -306,6 +306,7 @@
+ 	char *b = NULL;
+ 	JFILE *f = NULL;
+ 	int line, i;
++	const char* joe_data = JOEDATA;
+ 	
+ 	/* Find existing */
+ 	for (colors = allcolors.link.next; colors != &allcolors; colors = colors->link.next) {
+@@ -322,7 +323,7 @@
+ 	}
+ 	
+ 	if (!f) {
+-		joe_snprintf_2(buf, SIZEOF(buf), "%scolors/%s.jcf", JOEDATA, name);
++		joe_snprintf_2(buf, SIZEOF(buf), "%scolors/%s.jcf", joe_data, name);
+ 		f = jfopen(buf, "r");
+ 	}
+ 	if (!f) {
+diff -Naur joe-4.6-original/joe/gettext.c joe-4.6/joe/gettext.c
+--- joe-4.6-original/joe/gettext.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/gettext.c	2022-09-19 12:36:29.844193591 -0700
+@@ -153,14 +153,16 @@
+ {
+ 	FILE *f;
+ 	char buf[1024];
+-	joe_snprintf_2(buf, SIZEOF(buf), "%slang/%s.po",JOEDATA,s);
++	const char* joe_data = JOEDATA;
++	
++	joe_snprintf_2(buf, SIZEOF(buf), "%slang/%s.po",joe_data,s);
+ 	if ((f = fopen(buf, "r"))) {
+ 		/* Try specific language, like en_GB */
+ 		gettext_ht = htmk(256);
+ 		load_po(f);
+ 	} else if (s[0] && s[1]) {
+ 		/* Try generic language, like en */
+-		joe_snprintf_3(buf, SIZEOF(buf), "%slang/%c%c.po",JOEDATA,s[0],s[1]);
++		joe_snprintf_3(buf, SIZEOF(buf), "%slang/%c%c.po",joe_data,s[0],s[1]);
+ 		if ((f = fopen(buf, "r"))) {
+ 			gettext_ht = htmk(256);
+ 			load_po(f);
+diff -Naur joe-4.6-original/joe/main.c joe-4.6/joe/main.c
+--- joe-4.6-original/joe/main.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/main.c	2022-09-19 12:40:55.208591129 -0700
+@@ -311,6 +311,7 @@
+ 	int backopt;
+ 	int c;
+ 	int filesonly;
++	const char* joe_rc = JOERC;
+ 
+ 	joe_iswinit();
+ 	joe_locale();
+@@ -383,7 +384,7 @@
+ 	/* Name of system joerc file.  Try to find one with matching language... */
+ 	
+ 	/* Try full language: like joerc.de_DE */
+-	t = vsncpy(NULL, 0, sc(JOERC));
++	t = vsncpy(NULL, 0, sz(joe_rc));
+ 	t = vsncpy(sv(t), sv(run));
+ 	t = vsncpy(sv(t), sc("rc."));
+ 	t = vsncpy(sv(t), sz(locale_msgs));
+@@ -393,7 +394,7 @@
+ 		/* Try generic language: like joerc.de */
+ 		if (locale_msgs[0] && locale_msgs[1] && locale_msgs[2]=='_') {
+ 			vsrm(t);
+-			t = vsncpy(NULL, 0, sc(JOERC));
++			t = vsncpy(NULL, 0, sz(joe_rc));
+ 			t = vsncpy(sv(t), sv(run));
+ 			t = vsncpy(sv(t), sc("rc."));
+ 			t = vsncpy(sv(t), locale_msgs, 2);
+@@ -405,7 +406,7 @@
+ 			nope:
+ 			vsrm(t);
+ 			/* Try Joe's bad English */
+-			t = vsncpy(NULL, 0, sc(JOERC));
++			t = vsncpy(NULL, 0, sz(joe_rc));
+ 			t = vsncpy(sv(t), sv(run));
+ 			t = vsncpy(sv(t), sc("rc"));
+ 			if (!stat(t,&sbuf))
+diff -Naur joe-4.6-original/joe/options.c joe-4.6/joe/options.c
+--- joe-4.6-original/joe/options.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/options.c	2022-09-19 12:36:51.047904548 -0700
+@@ -998,6 +998,7 @@
+ 	char **t = NULL;
+ 	char *p;
+ 	int x, y;
++	const char* joe_data = JOEDATA;
+ 
+ 	if (extension) {
+ 		joe_snprintf_1(wildcard, SIZEOF(wildcard), "*.%s", extension);
+@@ -1006,7 +1007,7 @@
+ 	}
+ 
+ 	if (datadir) {
+-		joe_snprintf_2(buf, SIZEOF(buf), "%s%s", JOEDATA, datadir);
++		joe_snprintf_2(buf, SIZEOF(buf), "%s%s", joe_data, datadir);
+ 
+ 		/* Load first from global (NOTE: Order here does not matter.) */
+ 		if (!chpwd(buf) && (t = rexpnd(wildcard))) {
+diff -Naur joe-4.6-original/joe/rc.c joe-4.6/joe/rc.c
+--- joe-4.6-original/joe/rc.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/rc.c	2022-09-19 12:39:44.416889502 -0700
+@@ -92,6 +92,7 @@
+ 	JFILE *fd;		/* rc file */
+ 	int line = 0;		/* Line number */
+ 	int err = 0;		/* Set to 1 if there was a syntax error */
++	const char* joe_rc = JOERC;
+ 
+ 	zlcpy(buf, SIZEOF(buf), name);
+ #ifdef __MSDOS__
+@@ -247,7 +248,7 @@
+ 								rtn = procrc(cap, bf);
+ 							}
+ 							if (rtn == -1 && buf[x] != '/') {
+-								joe_snprintf_2(bf,SIZEOF(bf),"%s%s",JOERC,buf + x);
++								joe_snprintf_2(bf,SIZEOF(bf),"%s%s",joe_rc,buf + x);
+ 								rtn = procrc(cap, bf);
+ 							}
+ 							if (rtn == -1 && buf[x] != '/') {
+diff -Naur joe-4.6-original/joe/syntax.c joe-4.6/joe/syntax.c
+--- joe-4.6-original/joe/syntax.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/syntax.c	2022-09-19 12:37:09.482392054 -0700
+@@ -730,6 +730,7 @@
+ 	int line = 0;
+ 	int this_one = 0;
+ 	int inside_subr = 0;
++	const char* joe_data = JOEDATA;
+ 
+ 	/* Load it */
+ 	p = getenv("HOME");
+@@ -739,7 +740,7 @@
+ 	}
+ 
+ 	if (!f) {
+-		joe_snprintf_2(name,SIZEOF(name),"%ssyntax/%s.jsf",JOEDATA,syntax->name);
++		joe_snprintf_2(name,SIZEOF(name),"%ssyntax/%s.jsf",joe_data,syntax->name);
+ 		f = jfopen(name,"r");
+ 	}
+ 	if (!f) {
+diff -Naur joe-4.6-original/joe/termcap.c joe-4.6/joe/termcap.c
+--- joe-4.6-original/joe/termcap.c	2018-01-10 08:28:34.000000000 -0800
++++ joe-4.6/joe/termcap.c	2022-09-19 12:39:10.411149967 -0700
+@@ -155,6 +155,7 @@
+ 	ptrdiff_t x, y, z;
+ 	char *tp, *pp, *qq, *namebuf, **npbuf, *idxname;
+ 	int sortsiz;
++	const char* joe_rc = JOERC;
+ 
+ 	if (!name && !(name = joeterm) && !(name = getenv("TERM")))
+ 		return NULL;
+@@ -195,7 +196,7 @@
+ 			} else
+ 				namebuf = NULL;
+ 			namebuf = vsncpy(sv(namebuf), sc(".termcap "));
+-			namebuf = vsncpy(sv(namebuf), sc(JOERC));
++			namebuf = vsncpy(sv(namebuf), sz(joe_rc));
+ 			namebuf = vsncpy(sv(namebuf), sc("termcap /etc/termcap"));
+ 		}
+ 	}

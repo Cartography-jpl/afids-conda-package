@@ -1,0 +1,13 @@
+name: geocal
+version: 20220722
+
+channels:
+   - file:///ldata/smyth/afids-conda-package/afids-conda-channel
+   - defaults
+
+specs:
+   - python 3.9*
+   - conda
+   - afids-development-tools
+   - geocal
+   

@@ -1,0 +1,41 @@
+# The conda version of blitz doesn't actually work with gcc 7. This
+# contains a patch to fix this
+{% set name = "libblitz" %}
+{% set version = "1.0.1" %}
+{% set file_ext = "tar.gz" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  git_url: https://github.com/blitzpp/blitz.git
+  git_rev: {{ version }}
+     
+build:
+  number: 0
+
+requirements:
+  build:
+    - {{ compiler('c') }}  
+    - {{ compiler('cxx') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    
+  host:
+  run:
+
+about:
+  home: https://github.com/blitzpp/blitz
+  license: Various (LGPL, BSD, Perl Aristic License)
+  license_file: LICENSE
+  summary: This is the Blitz library
+  description: |
+    Blitz++ is a C++ template class library that provides
+    high-performance multidimensional array containers for scientific
+    computing.
+  doc_url: https://github.com/blitzpp/blitz/wiki
+

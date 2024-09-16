@@ -1,0 +1,32 @@
+{% set name = "pomm-ui" %}
+{% set version = "1.0" %}
+{% set file_ext = "tar.bz2" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+# We have a build step that automatically generates this tar file
+# Would be nice to download from github, but we have permission problems for
+# doing that 
+  url: ../src/{{ name }}-{{ version }}.{{ file_ext }}
+
+build:
+  number: 2
+  noarch: generic
+  script: "python -m pip install . --no-deps --ignore-installed --no-cache-dir --no-index -vvv "
+
+requirements:
+  host:
+    - pip
+    - pommos
+  run:
+    - pommos
+
+about:
+  home: https://github.jpl.nasa.gov/Cartography/POMM-UI
+  license: BSD
+  license_file: ../LICENSE
+  summary: The POMM UI
+

@@ -1,0 +1,19 @@
+autom4te.cache
+create_delta.bundle
+*~
+\#*#
+.#*
+.DS_Store
+*.pyc
+*.o
+*.lo
+.cache
+.tramp_history
+#src/
+# Files we build with makefile
+micromamba
+Manifest_linux-modify.yml
+afids-conda-channel/built-*
+geocal-*-Linux-x86_64.sh
+emit-*-Linux-x86_64.sh
+afids-conda-channel.tar.bz2

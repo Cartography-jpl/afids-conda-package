@@ -1,0 +1,7 @@
+There is nothing special about this gdal build. It is just that the one
+in conda-forge depends on a number of packages that conflict with other
+packages. So we build our own version to use a compatible set of dependencies.
+
+This is pretty much a copy of gdal-feedstock
+(https://github.com/conda-forge/gdal-feedstock), with minor editting for
+turning of some dependencies that clash

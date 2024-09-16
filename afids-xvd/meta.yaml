@@ -1,0 +1,60 @@
+{% set name = "afids-xvd" %}
+{% set version = "1.05" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  git_url: https://github.com/Cartography-jpl/{{ name }}.git
+  git_rev: {{ version }}
+
+build:
+  number: 2
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    # Note a number of these dependencies are not direct, for some reason
+    # not all the dependencies are tracked. We basically depend on vicar,
+    # vicar-rtl, and openmotif-dev. The other dependencies are things required
+    # not automatically pulled in. If this ever gets fixed, we can stop listing
+    # everything
+    - vicar-rtl
+    - vicar
+    - openmotif-dev
+    - xorg-libxpm
+    - libglx {{ libglx }}
+    - xorg-libxdmcp
+    - xorg-libxmu
+    - xorg-libxau
+    - openjpeg
+    - libpng
+    - xorg-libxft    
+  run:
+    - vicar-rtl
+    - vicar
+    - openmotif
+    - xorg-libxpm
+    - libglx {{ libglx }}
+    - xorg-libxdmcp
+    - xorg-libxmu
+    - xorg-libxau
+    - openjpeg
+    - libpng
+    - xorg-libxft    
+    
+about:
+  license: BSD
+  license_file: ../LICENSE
+  summary: This is the AFIDS version of the XVD program. 
+

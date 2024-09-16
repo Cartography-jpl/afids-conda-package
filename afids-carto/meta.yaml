@@ -1,0 +1,40 @@
+# Note there is a completely unrelated package in conda-forge called carto.
+# So we don't have conflicts we change the package name to afids-carto. However
+# the source tar file still just has carto
+{% set name = "afids-carto" %}
+{% set version = "1.05" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  git_url: https://github.com/Cartography-jpl/{{ name }}.git
+  git_rev: {{ version }}
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - gsl
+    - vicar-rtl
+  run:
+    - gsl
+    - vicar-rtl
+
+about:
+  license: BSD
+  license_file: ../LICENSE
+  summary: This is the Carto library, which has various utilities used by AFIDS.
+

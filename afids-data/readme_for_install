@@ -1,0 +1,17 @@
+This contains various support data files for use with geocal and AFIDS.
+
+Note that some of the data is very large (e.g. srtmL2_filled is 600 GB). We
+don't distribute this data as Conda packages because it is too large. Normally
+this is copied somewhere on the system.
+
+You can either replace the directories here with symbolic links to where the
+data is actually located, or you can update the environment variables set in
+$CONDA_PREFIX/etc/conda/activate.d/afids-data-activate.sh with the true
+location of the data.
+
+Note there is a setup_afids_data.sh script in this directory. If you are
+using Conda (e.g., doing "conda activate <env>") you do *not* need to run
+this setup file. This is there for software that lives outside of conda which
+may want to use the afids data. The automatically run Conda script
+$CONDA_PREFIX/etc/conda/activate.d/afids-data-activate.sh already handles
+the setup.

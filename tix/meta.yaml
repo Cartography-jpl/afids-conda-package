@@ -1,0 +1,42 @@
+{% set name = "Tix" %}
+{% set version = "8.4.3" %}
+{% set file_ext = "tar.gz" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  url: https://downloads.sourceforge.net/tix/{{ name }}{{ version }}-src.{{ file_ext }}
+  patches:
+    - Tix8.4.3.patch
+    - Tix-generic-sort.patch
+    - tix-8.4.3-link.patch
+    - tix-8.4.3-tcl8.5.patch
+      
+build:
+  number: 3
+
+requirements:
+  build:
+    - {{ compiler('c') }}  
+    - {{ compiler('cxx') }}  
+    - pkg-config 
+    - patch
+    - make
+  host:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+  run:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+    
+about:
+  license: Tix
+  summary: This Tix, a widget library for Tcl/Tk

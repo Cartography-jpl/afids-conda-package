@@ -1,0 +1,48 @@
+# Build seems to work better if we pin things to be consistent across different
+# builds
+
+# The latest python in 3.12, but there isn't a scikit-umfpack with that version.
+# So hold to slightly older version
+python: 3.11
+
+# Note that conflicts that arise can perhaps be solved by updating
+# need_from_conda_forge.txt and rerunning determine-conda-forge-package.
+
+# A couple of constraints we have from other packages we want to install.
+# Afids doesn't care about these versions, but we need to make sure to grab
+# a set that is consistent
+libiconv: ">=1.17,<2.0a0"
+# Don't think we need this, leave in place a short time until we make sure
+#icu: ">=70.1,<71.0a0"
+
+# One of the dependencies of afids-xvd (xorg-libsm) constrains libuuid
+libuuid: "2.32.1,<3.0a0"
+
+# Constraint on libglx needed for afids-xvd
+libglx: 1.7.0
+
+# Hold numpy fixed. We don't actually have any particular constraint
+# on the numpy version, but we need to have the same one used for all
+# the packages. This version here is what scikit-umfpack 0.3.3 requires
+# We can update this if needed if we are using a new umfpack
+numpy: 1.26.4
+
+# h5py constrains the hdf version we can use
+hdf5: 1.14.3
+
+# A lot of package conflicts comes from getting the wrong libgdal package.
+# So we hold this fixed. Note we don't actually require any particular version,
+# just that it doesn't change between build
+gdal:    3.9.2
+libgdal: 3.9.2
+# Version of zstd and hdf5 that gdal grabs. We need to hold this fixed so
+# other things using thest don't conflict. This can be updated to
+# whatever gdal actually uses if we change the gdal package.
+zstd:    1.5.6
+libxml2: 2.12.7
+
+pin_run_as_build:
+    vicar_rtl:
+      max_pin: x.x
+    vicar:
+      max_pin: x.x

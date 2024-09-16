@@ -1,0 +1,21 @@
+#!/bin/bash
+vlist="AFIDSTOP AFIDSXVDTOP AFIDSDATATOP VICARTOP AFIDSPYTHONTOP AFIDS_ROOT AFIDS_TCL AFIDS_VERSION VRDIFONTS TAE_PATH DFFPATH AFIDS_JOERC"
+for v in $vlist; do
+    if [[ -n "${!v}" ]]; then
+	sv="__CONDA_SHLVL_${CONDA_SHLVL}_${v}"
+	export $sv=${!v}
+    fi
+done   
+
+export AFIDSTOP=$CONDA_PREFIX
+export AFIDSXVDTOP=$CONDA_PREFIX
+export AFIDSDATATOP=$CONDA_PREFIX/data
+export VICARTOP=$CONDA_PREFIX
+export AFIDSPYTHONTOP=$CONDA_PREFIX
+export AFIDS_ROOT=$CONDA_PREFIX/afids
+export AFIDS_TCL=$CONDA_PREFIX/afids/tcl
+export AFIDS_VERSION="1.26"
+export VRDIFONTS=$CONDA_PREFIX/share/fonts/vrdi
+export TAE_PATH="$CONDA_PREFIX/afids/vdev:$CONDA_PREFIX/vicar/bin:$CONDA_PREFIX/vicar/lib:$CONDA_PREFIX/vicar/vids/lib:$CONDA_PREFIX/afids/pommos"
+export DFFPATH=$CONDA_PREFIX/data/vextract
+export AFIDS_JOERC=$CONDA_PREFIX/share/joe

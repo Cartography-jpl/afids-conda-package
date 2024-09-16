@@ -1,0 +1,38 @@
+{% set name = "itcl" %}
+{% set version = "4.2.2" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  git_url: https://github.com/tcltk/itcl.git
+  git_rev: itcl-4-2-2
+      
+build:
+  number: 2
+
+requirements:
+  build:
+    - {{ compiler('c') }}  
+    - {{ compiler('cxx') }}
+    - git
+    - pkg-config 
+    - patch
+    - make
+  host:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+  run:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+    
+about:
+  license: itcl
+  summary: This itcl, a library for Tcl/Tk

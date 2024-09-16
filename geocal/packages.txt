@@ -1,0 +1,66 @@
+# This comes from geocal meta.yaml. We can build things
+# up to sort out conflicts
+#
+# We give the exact version and build for packages we build ourselves, to
+# make sure another one doesn't sneak in. We want to know about conflicts
+# between our packages
+#
+# Test with:
+# conda create -n conflict-find $(grep -v '#' geocal/packages.txt)
+#
+# Uncomment things as we try adding them, to find problems
+
+pkg-config 
+libgcc-ng
+gcc_linux-64
+gxx_linux-64
+gfortran_linux-64
+blas=*=openblas
+numpy
+scipy
+matplotlib
+h5py=3.1.0=nompi_py39hb25b059_1100
+sphinx
+pytest
+pytest-xdist
+pytest-cov
+ipython
+jupyter
+scikit-umfpack
+seaborn
+pandas
+numpydoc
+jsonpickle
+tabulate
+future
+six
+docopt
+jedi
+prompt_toolkit
+pygments
+black
+xerces-c
+libnetcdf
+kealib
+gdal=3.2.1=py39hcdca60c_102
+libgdal=3.2.1=hcdca60c_102
+boost=1.74.0=py39h4d8ed96_103
+boost-cpp=1.74.0=h2bc3f7f_104
+hdf5
+hdfeos
+gsl
+carto
+pkgconfig
+doxygen
+swig
+ncurses
+fftw
+ptpython
+vicar-rtl
+vicar-gdalplugin
+afids-data
+spice
+libblitz
+graphviz
+pynitf
+opencv-nonfree=4.1.0=np119py39h3fd9d12_3

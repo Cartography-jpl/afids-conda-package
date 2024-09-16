@@ -1,0 +1,5 @@
+Conda already has a tcl/tk package, but it doesn't include the header files
+needed to build against it. We need these header files for building tix and
+itcl, so we have our own package. This just copies the header files from the
+source tree.
+

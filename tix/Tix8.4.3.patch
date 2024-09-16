@@ -1,0 +1,25 @@
+diff -rupN Tix8.4.3_old/Makefile.in Tix8.4.3/Makefile.in
+--- Tix8.4.3_old/Makefile.in	2010-01-27 15:50:20.000000000 -0800
++++ Tix8.4.3/Makefile.in	2010-01-27 15:51:32.000000000 -0800
+@@ -353,10 +353,10 @@ install-lib-binaries:
+ 	done
+ 	@echo "Installing preference sets to $(DESTDIR)$(pkglibdir)/pref"
+ 	@mkdir -p $(DESTDIR)$(pkglibdir)/pref
+-	@cp -p $(srcdir)/library/pref/*.* $(DESTDIR)$(pkglibdir)/pref/
++	@cp $(srcdir)/library/pref/*.* $(DESTDIR)$(pkglibdir)/pref/
+ 	@echo "Installing bitmaps to $(DESTDIR)$(pkglibdir)/bitmaps"
+ 	@mkdir -p $(DESTDIR)$(pkglibdir)/bitmaps
+-	@cp -p $(srcdir)/library/bitmaps/*.* $(DESTDIR)$(pkglibdir)/bitmaps/
++	@cp $(srcdir)/library/bitmaps/*.* $(DESTDIR)$(pkglibdir)/bitmaps/
+ 
+ #========================================================================
+ # Install binary executables (e.g. .exe files)
+@@ -441,7 +441,7 @@ dist-clean:
+ 
+ dist: dist-clean
+ 	mkdir -p $(DIST_DIR)
+-	cp -pr $(srcdir)/* $(DIST_DIR)/
++	cp -r $(srcdir)/* $(DIST_DIR)/
+ 	chmod 664 $(DIST_DIR)/Makefile.in $(DIST_DIR)/aclocal.m4
+ 	chmod 775 $(DIST_DIR)/configure $(DIST_DIR)/configure.in
+ 

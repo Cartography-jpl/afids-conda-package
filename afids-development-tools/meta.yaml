@@ -1,0 +1,101 @@
+{% set name = "afids-development-tools" %}
+{% set version = "1.06" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  # No source, the is a meta package
+
+build:
+#  number: 0
+# Remove spice
+#  number: 1
+# Add spice back, we sorted out package to work around licensing
+  number: 2
+
+requirements:
+  build:
+  host:
+  run:  
+    - {{ compiler('c') }}  
+    - {{ compiler('cxx') }}  
+    - {{ compiler('fortran') }}
+    - python {{ python }}
+    - conda
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+    - blas
+    - automake
+    - autoconf
+    - libtool
+    - parallel
+    - {{ pin_compatible('numpy', max_pin='x.x') }}
+    - scipy
+    - matplotlib
+    - sphinx
+    - pytest
+    - pytest-xdist
+    - pytest-cov
+    - ipython
+    - jupyter
+    # Note this library can be a bit limiting in what else can be installed.
+    # We can live without this, the sba takes advantage of this library if
+    # available, but it only matters for large systems. Everything works without
+    # having umfpack available
+    - scikit-umfpack
+    - seaborn
+    - pandas
+    - numpydoc
+    - jsonpickle
+    - tabulate
+    - future
+    - six
+    - docopt
+    - appdirs
+    - libnetcdf
+    - kealib
+    - gdal {{ gdal }}
+    - libgdal {{ libgdal }}
+    - boost
+    - h5py
+    - hdf5 {{ hdf5 }} 
+    - hdfeos2
+    - hdfeos5
+    - gsl
+    - pkgconfig
+    - doxygen
+    - swig
+    - ncurses
+    - fftw
+    - ptpython
+    - afids-carto
+    - vicar-rtl
+    - vicar-gdalplugin
+    - afids-data
+    - spice
+    - libblitz
+    - graphviz
+    - pynitf
+    - afids-xvd
+    # This doesn't build now, and I'm not sure we actually need this. For now just
+    # use opencv, and we can come back to this if needed
+    # Not strictly required, but useful
+    #- opencv-nonfree
+    - opencv
+
+about:
+  home: https://github.jpl.nasa.gov/Cartography/geocal
+  license: BSD
+  license_file: ../LICENSE
+  summary: This is a metapackage that installs the tools to build geocal or afids
+  description: |
+    This has everything needed to build afids or geocal, along with a few
+    other useful tools (e.g. opencv). It does not contain geocal, so if
+    you are interested in building afids only you may want to also install
+    the geocal conda package.
+

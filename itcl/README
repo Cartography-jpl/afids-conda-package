@@ -1,0 +1,5 @@
+Conda already has a tcl/tk package, but it doesn't include itcl. So we build
+our own.
+
+Nothing special about this code, it just doesn't exist in conda. If a package
+is every added, we can change to use a "standard" one.

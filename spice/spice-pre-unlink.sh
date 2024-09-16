@@ -1,0 +1,1 @@
+rm -r $PREFIX/cspice

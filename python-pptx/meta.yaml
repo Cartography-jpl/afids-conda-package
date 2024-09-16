@@ -1,0 +1,40 @@
+# Copied from conda forge feedstock
+{% set version = "0.6.23" %}
+
+package:
+  name: python-pptx
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/p/python-pptx/python-pptx-{{ version }}.tar.gz
+  sha256: 587497ff28e779ab18dbb074f6d4052893c85dedc95ed75df319364f331fedee
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - python =2.7|>=3.6
+    - pip
+  run:
+    - python =2.7|>=3.6
+    - lxml >=3.1.0
+    - pillow >=3.3.2
+    - xlsxwriter >=0.5.7
+    - libiconv
+
+about:
+  home: http://github.com/scanny/python-pptx
+  license_file: LICENSE
+  license: MIT
+  license_family: MIT
+  summary: Generate and manipulate Open XML PowerPoint (.pptx) files
+  dev_url: http://github.com/scanny/python-pptx
+  doc_url: https://python-pptx.readthedocs.io
+
+extra:
+  recipe-maintainers:
+    - pmlandwehr
+    - synapticarbors

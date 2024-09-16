@@ -1,0 +1,61 @@
+{% set name = "opencv-nonfree" %}
+{% set version = "4.1.0" %}
+{% set file_ext = "tar.gz" %}
+{% set file_ext2 = "zip" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+# Note, you can get the sha256 by openssl sha256 <tar file>
+source:
+  - url: https://github.com/opencv/opencv_contrib/archive/{{ version }}.{{ file_ext }}
+    fn: opencv_contrib-{{ version }}.{{ file_ext }}
+    folder: opencv_contrib
+    sha256: e7d775cc0b87b04308823ca518b11b34cc12907a59af4ccdaf64419c1ba5e682
+  - url: https://github.com/opencv/opencv/archive/{{ version}}.{{ file_ext2 }}
+    folder: opencv
+    sha256: 2c75b129da2e2c8728d168b7bf14ceca2da0ebe938557b109bae6742855ede13
+    fn: opencv-{{ version }}.{{ file_ext2 }}
+  
+build:
+  number: 3
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - cmake
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - blas
+    - openjpeg
+    - zlib
+    - hdf5 {{ hdf5 }}
+    - libtiff
+    - libpng
+    - eigen
+    - python {{ python }}
+    - numpy {{ numpy }}
+    - liblapack
+    - libcblas
+    - zstd {{ zstd }}
+  run:
+    - blas
+    - openjpeg
+    - zlib
+    - libtiff
+    - libpng
+    - hdf5 {{ hdf5 }}
+    - eigen
+    - python {{ python }}
+    - {{ pin_compatible('numpy', max_pin='x.x') }}
+
+about:
+  license: BSD License plus OpenCV nonfree
+  summary: This is opencv + contrib stuff. We include the nonfree code (e.g., SIFT)
+

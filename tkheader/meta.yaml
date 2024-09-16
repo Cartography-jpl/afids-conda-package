@@ -1,0 +1,30 @@
+{% set name = "tkheader" %}
+{% set version = "8.6" %}
+#{% set version = "8.5" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  - path: ./tk{{ version }}
+    folder: tk{{ version }}
+  - path: ./tcl{{ version }}
+    folder: tcl{{ version }}
+  - path: ./tkheader
+    folder: tkheader
+      
+build:
+  noarch: generic
+  number: 1
+
+requirements:
+  build:
+  host:
+    - tk={{ version }}.*
+  run:
+    - tk={{ version }}.*
+    
+about:
+  license: TCL/TK
+  summary: This the TCL/TK internal header files, needed to build some packages

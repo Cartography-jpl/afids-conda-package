@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+import click
+from conda_support import PackageSet, PackageModify
+import subprocess
+import sys
+
+@click.group()
+def cli():
+    '''This is various utility routines for working with conda packages
+    '''
+    pass
+
+@cli.command()
+@click.argument("conda_env", type=str)
+@click.argument("output_file", type=str)
+def package_from_env(conda_env, output_file):
+    '''Save the packages in a given environment to a PackageSet pickle file'''
+    p = PackageSet.from_conda_env(conda_env)
+    p.save_pickle(output_file)
+
+@cli.command()
+def upload_to_anaconda_from_env():
+    '''Upload the latest packages found in a environment to the anaconda web site.
+    You should be in the environment we are uploading.'''
+    p = PackageSet.from_conda_env(None)
+    p2 = PackageSet()
+    for k,v in p.items():
+        if(v["channel"] == "afids-conda-channel"):
+            p2[k] = v
+    p2.upload_to_anaconda("./afids-conda-channel", "cartography-jpl")
+    
+@cli.command()
+@click.argument("package_set", type=str)
+def download_conda_forge(package_set):
+    '''Download conda forge files found in the package set.'''
+    p = PackageSet.load_pickle(package_set)
+    p.fill_in_extra()
+    p2 = PackageSet()
+    for k,v in p.items():
+        if(v["channel"] == "conda-forge"):
+            p2[k] = v
+    p2.download_all("./afids-conda-channel")
+    p2.save_pickle("./afids-conda-channel/conda_forge_package_set.pkl")
+    subprocess.run(["conda", "index", "./afids-conda-channel"])
+
+@cli.command()
+@click.argument("fname", type=str)
+def download_from_file(fname):
+    '''Download packages listed in a text file. Useful when we are trying
+    to build up the afids-conda library for installing packages.'''
+    p = PackageSet.from_text_file(fname)
+    p.download_all("./afids-conda-channel")
+    subprocess.run(["conda", "index", "./afids-conda-channel"])
+
+@cli.command()
+@click.argument("tname", type=str,nargs=-1)
+def fix_libiconv_dependency(tname):
+    '''We have an issue with gst-plugins-bad and gst-plugins-ugly.
+
+When we download from the web channel, we get the following
+dependency on libiconv:
+
+mamba repoquery whoneeds libiconv
+ Name             Version Build          Depends                  Channel
+────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ gst-plugins-bad  1.20.3  h4fdb303_0     libiconv >=1.16,<2.0.0a0 conda-forge
+ gst-plugins-ugly 1.20.3  h907bd2c_2     libiconv >=1.16,<2.0.0a0 conda-forge
+ libglib          2.74.0  h7a41b64_0     libiconv >=1.17,<2.0a0   /home/afids-conda/workdir/offline-channel
+ pygobject        3.42.2  py39habf54e5_0 libiconv                 /home/afids-conda/workdir/offline-channel
+
+However, when we have this from the offline channel, we get
+libiconv >=1.16,<1.17.0a0.
+
+This is way too restrictive, we can't actually satisfy this along with other
+constraints we have on libiconv. However, the constraint isn't actually real,
+it is rather an artifact of info/index.json having too tight a constraint.
+The actual recipe just depends on libiconv, so I'm guessing something about
+the system/versions of conda used in building these packages puts this too
+tight constraint in. We can modify the info/index.json file to put the
+correct constraint in, so the offline channel has the same dependency as the
+conda-forge channel.    
+
+This command cleans this particular problem up for a package tar.bz2 file
+    '''
+    for t in tname:
+        p = PackageModify(t)
+        p.sed(filename="info/index.json", sed_command='s/libiconv >=1.16,<1.17.0a0/libiconv >=1.16,<2.0.0a0/')
+        p.close()
+    subprocess.run(["rm", "-rf", "./afids-conda-channel/linux-64/.cache",
+                    "./afids-conda-channel/noarch/.cache"], check=True)
+    subprocess.run(["conda", "index", "./afids-conda-channel"], check=True)
+
+@cli.command()
+@click.argument("tname", type=str,nargs=-1)
+def fix_openssl_dependency(tname):
+    '''Similar issue with openssl missing the 'a' in its dependency'''
+    for t in tname:
+        p = PackageModify(t)
+        p.sed(filename="info/index.json", sed_command='s/openssl >=1.1.1,/openssl >=1.1.1a,/')
+        p.close()
+    subprocess.run(["rm", "-rf", "./afids-conda-channel/linux-64/.cache",
+                    "./afids-conda-channel/noarch/.cache"], check=True)
+    subprocess.run(["conda", "index", "./afids-conda-channel"], check=True)
+    
+    
+if __name__ == '__main__':
+    cli()
+    

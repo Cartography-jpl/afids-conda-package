@@ -1,0 +1,4 @@
+You don't strictly speaking need to use docker for create AFIDS packages.
+But I've had enough trouble with packages grabbing system libraries that it
+is worth creating an isolated docker instance to isolate things (GDAL is
+particularly bad about this, grabbing all kinds of system libraries).

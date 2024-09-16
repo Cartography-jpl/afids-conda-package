@@ -1,0 +1,44 @@
+{% set name = "pommos" %}
+{% set version = "1.2" %}
+{% set file_ext = "tar.bz2" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  # Create by cd ~/Local/afids-repo/afids_python
+  # tar -cfz ~/Local/afids
+  url: ../src/{{ name }}-{{ version }}.{{ file_ext }}
+
+build:
+  number: 2
+
+requirements:
+  build:
+  host:
+    - afids
+    - geocal
+    - afids-development-tools
+    - python {{ python }}
+    - pip
+    # Stuff needed by the GUI. See https://github.jpl.nasa.gov/tsoliman/POMM/blob/master/requirements.txt
+    # Note these don't have packages, so we just install in our build
+    # ttkbootstrap
+    # tkinterweb
+    - pyinstaller
+  run:
+    - afids
+    - geocal
+    - afids-development-tools
+    - python {{ python }}
+    - pip
+    # ttkbootstrap
+    # tkinterweb
+    - pyinstaller
+
+about:
+  license: BSD
+  license_file: ../LICENSE
+  summary: This is AFIDS.
+

@@ -1,0 +1,40 @@
+{% set name = "hdfeos" %}
+{% set version = "2.19" %}
+{% set file_ext = "tar.gz" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  # Note, this is public, see https://wiki.earthdata.nasa.gov/display/DAS/Toolkit+Downloads
+  # But not super easy to download, so we have a version stashed in our src directory
+  url: ../src/{{ name }}-{{ version }}.{{ file_ext }}
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - {{ compiler('c') }}  
+    # Don't really need c++ or fortran, but configure checks for this and
+    # fails if it doesn't find it
+    - {{ compiler('cxx') }}  
+    - {{ compiler('fortran') }}
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - hdf5 {{ hdf5 }}
+    - hdf4
+  run:
+    - hdf5 {{ hdf5 }}
+    - hdf4
+
+about:
+  home: http://hdfeos.org
+  license: Copyright (C) 1996 Hughes and Applied Research Corporation
+  summary: This is the HDFEOS library
+

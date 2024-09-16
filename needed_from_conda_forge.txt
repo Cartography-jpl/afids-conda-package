@@ -1,0 +1,34 @@
+# I've found things work best if we restrict ourself to the defaults channel,
+# and manually pull out the packages we need from conda forge. We create
+# an environment with the required dependencies, and then note what we need
+# from conda forge.
+
+# For opencv
+libcblas
+liblapack
+libblas
+
+# For geocal
+doxygen
+rclone
+
+# For xvd
+libiconv>=1.17,<2.0a0
+openmotif-dev
+xorg-libxdmcp
+xorg-libxmu
+xorg-libxau
+xorg-libxft
+xorg-libxpm
+
+# For development tools
+parallel
+matplotlib
+python=3.9.16
+zstd=1.4.9
+
+# For gdal
+libkml
+
+# For gnuplot
+pango

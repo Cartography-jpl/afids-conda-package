@@ -1,0 +1,4 @@
+The unit tests don't fully run, but we can build and install afids.
+
+It seems like everything is working, although we might find issues with
+more testings.
