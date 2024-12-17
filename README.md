@@ -1,7 +1,8 @@
 # afids-conda-package
 
 This contains conda recipes for building the afids system in conda,
-or for using prebuilt afids package to install in conda.
+or for using prebuilt afids package to install in conda. 
+(GeoCal/pynitf NPO 20999-CP AFIDS/VICAR NPO 52175-CP)
 
 Conda is a packaging system (e.g., similar to redhat "yum" or debian 
 "apt-get"). It is different than other packaging systems in that 1) it can
