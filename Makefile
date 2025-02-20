@@ -386,6 +386,9 @@ emit-sh:
 afids-sh:
 	constructor afids-constructor
 
+afids-sbg-sh:
+	constructor sbg-constructor
+
 channel-tar:
 	tar --exclude=.cache --exclude=built-* -cjf afids-conda-channel.tar.bz2 ./afids-condachannel
 
