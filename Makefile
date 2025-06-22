@@ -349,8 +349,13 @@ upload-to-anaconda:
 	./conda_support_util upload-to-anaconda-from-env
 
 Manifest_linux.yml:
-	-conda env remove -n afids-test
+	-conda env remove --yes -n afids-test
 	$(CONDA_CREATE_ENV) --yes -n afids-test geocal afids-development-tools afids joe-editor 
+	conda env export --override-channels --channel conda-forge --channel ./afids-conda-channel -n afids-test > $@
+
+Manifest_linux_temp.yml:
+	-conda env remove --yes -n afids-test
+	$(CONDA_CREATE_ENV) --yes -n afids-test geocal afids-development-tools afids joe-editor tensorflow scikit-learn loguru loguru-config pytest-loguru ruff mypy mamba
 	conda env export --override-channels --channel conda-forge --channel ./afids-conda-channel -n afids-test > $@
 
 # OSX currently doesn't work, although we could possibly dust this off and
@@ -382,6 +387,9 @@ geocal-sh:
 
 emit-sh:
 	constructor emit-constructor
+
+ecostress-sh:
+	constructor ecostress-constructor
 
 afids-sh:
 	constructor afids-constructor

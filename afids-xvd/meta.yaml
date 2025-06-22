@@ -10,7 +10,7 @@ source:
   git_rev: {{ version }}
 
 build:
-  number: 2
+  number: 3
 
 requirements:
   build:
@@ -39,7 +39,8 @@ requirements:
     - xorg-libxau
     - openjpeg
     - libpng
-    - xorg-libxft    
+    - xorg-libxft
+    - xorg-xproto
   run:
     - vicar-rtl
     - vicar
@@ -52,6 +53,7 @@ requirements:
     - openjpeg
     - libpng
     - xorg-libxft    
+    - xorg-xproto
     
 about:
   license: BSD
