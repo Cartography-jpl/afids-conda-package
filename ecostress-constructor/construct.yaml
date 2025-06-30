@@ -477,7 +477,7 @@ specs:
   - sphinxcontrib-jsmath=1.0.1=pyhd8ed1ab_1
   - sphinxcontrib-qthelp=2.0.0=pyhd8ed1ab_1
   - sphinxcontrib-serializinghtml=1.1.10=pyhd8ed1ab_1
-  - spice=67.0=1
+  - spice=67.0=2
   - sqlite=3.50.1=h9eae976_0
   - stack_data=0.6.3=pyhd8ed1ab_1
   - statsmodels=0.14.4=py311h9f3472d_0

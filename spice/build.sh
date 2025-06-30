@@ -2,7 +2,7 @@
 # we can't include in our package due to licensing constraints. The package get
 # installed as a set of links of $PREFIX/cspice, and we then have a script for
 # downloading the cspice package.
-curl -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z | tar -xz -C $PREFIX
+curl -k -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z | tar -xz -C $PREFIX
 mkdir -p $PREFIX/include
 mkdir -p $PREFIX/lib
 mkdir -p $PREFIX/bin
