@@ -1,5 +1,0 @@
-There is nothing special about this gnuplot build. It is just that the one
-in conda-forge depends on a number of packages that conflict with other
-packages. So we build our own version to use a compatible set of dependencies.
-
-We build this the way we do for afids.
