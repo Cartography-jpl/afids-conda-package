@@ -1,0 +1,43 @@
+context:
+  name: pynitf
+  version: 1.16
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    tag: ${{ version }}
+
+build:
+  number: 1
+  noarch: python
+  script:
+    - python -m pip install . --no-deps --ignore-installed --no-cache-dir --no-index -vvv
+
+requirements:
+  build:
+    - git
+  host:
+    - pip
+    - numpy
+    - python ${{ python }}
+    - docopt-ng
+    - pytest-runner
+    - jsonpickle
+    - h5py
+  run:
+    - numpy
+    - pip
+    - python ${{ python }}
+    - docopt-ng
+    - jsonpickle
+    - h5py
+
+about:
+  license: BSD-3-Clause
+  license_file:
+    - LICENSE
+  summary: This is a python module used to read and write NITF 2.1 files.
+

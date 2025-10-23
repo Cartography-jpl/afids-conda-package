@@ -7,8 +7,4 @@
 # Actual work is done by a python script, but conda requires us to have
 # a bash script. So we just forward to python
 
-/usr/bin/env python $PREFIX/bin/.afids-data-post-link.py
-# Not 100% sure setting these variables in the post link step is correct.
-# But we want to make sure the users set these values, so we have this
-# here.
-conda env config vars set AFIDS_DATA=$PREFIX/data LANDSAT_ROOT=need_to_set ELEV_ROOT=need_to_set CIB1_ROOT=need_to_set CIB5_ROOT=need_to_set AFIDS_VDEV_DATA=$PREFIX/data/vdev SPICEDATA=$PREFIX/data/cspice
+/usr/bin/env python $CONDA_PREFIX/bin/.afids-data-post-link.py

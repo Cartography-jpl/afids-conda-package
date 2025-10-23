@@ -1,0 +1,50 @@
+context:
+  name: spice
+  version: 67.0
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  # Note we can't actually redistribute JPL spice because of licensing. But
+  # we have scripts that download from the JPL site, so this mostly acts like
+  # a conda package from the outside.
+  # url: https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z
+
+build:
+  number: 3
+  script:
+    - if: linux
+      then: curl -k -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z | tar -xz -C $PREFIX
+    - if: osx
+      then: curl -k -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/MacM1_OSX_clang_64bit/packages/cspice.tar.Z | tar -xz -C $PREFIX
+    - mkdir -p $PREFIX/include
+    - mkdir -p $PREFIX/lib
+    - mkdir -p $PREFIX/bin
+    - cd $PREFIX/include
+    - ln -s ../cspice/include/Spice*.h .
+    - cd $PREFIX/bin
+    - ln -s ../cspice/exe/* .
+    - cd $PREFIX/lib
+    - ln -s ../cspice/lib/* .
+    - ln -s ../lib/cspice.a libcspice.a
+    - ln -s ../lib/csupport.a libcsupport.a
+    - rm -r $PREFIX/cspice
+    - cp $RECIPE_DIR/spice-post-link.sh $PREFIX/bin/.spice-post-link.sh
+    - cp $RECIPE_DIR/LICENSE.txt $SRC_DIR/
+
+requirements:
+  build:
+    - perl
+    - patch
+    - make
+    - m4
+  host:
+  run:
+
+about:
+  license: LicenseRef-spice
+  license_file: LICENSE.txt
+  summary: 'NASA ancillary information system. license_url: https://naif.jpl.nasa.gov/naif/rules.html'
+

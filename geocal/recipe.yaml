@@ -1,0 +1,164 @@
+context:
+  name: geocal
+  version: 20251006
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    #tag: ${{ version }}
+    rev: e4c3cb071f3063352bd35b3048ddad1c077e10db
+    target_directory: geocal
+    # Spice is a little complicated, because of the licensing. We can download
+    # and link against this, and then distribute the package. But we can't redistribute
+    # the spice library. So we go ahead and download when we build, and then use the
+    # packages that we have built without including the libraries directly in conda
+    # rattler-build Doesn't support .Z files yet, so we handle this below in the build
+    # script
+    #- url: https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z
+    #  target_directory: cspice
+
+build:
+  number: 1
+  script:
+    - if: linux
+      then: curl -k -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z | tar -xz -C ./
+    - if: osx
+      then: curl -k -L https://naif.jpl.nasa.gov/pub/naif/toolkit//C/MacM1_OSX_clang_64bit/packages/cspice.tar.Z | tar -xz -C ./
+    - ln -s ./cspice.a cspice/lib/libcspice.a
+    - ln -s ./csupport.a cspice/lib/libcsupport.a
+    - mkdir geocal/build
+    - cd geocal/build
+    - ../configure --prefix="$PREFIX" --with-spice=$SRC_DIR/cspice --without-mspi-shared --without-afids --disable-static --without-documentation
+    - make -j$CPU_COUNT all
+    - make install
+    - rm -f $PREFIX/lib/libgeocal.la
+    - cat $RECIPE_DIR/extra_for_setup $PREFIX/setup_geocal.sh > $PREFIX/setup_geocal.sh.temp
+    - mv -f $PREFIX/setup_geocal.sh.temp $PREFIX/setup_geocal.sh
+    - cat $RECIPE_DIR/extra_for_setup $PREFIX/setup_geocal.csh > $PREFIX/setup_geocal.csh.temp
+    - mv -f $PREFIX/setup_geocal.csh.temp $PREFIX/setup_geocal.csh
+
+requirements:
+  build:
+    - ${{ compiler('c') }}  
+    - ${{ compiler('cxx') }}  
+    - ${{ compiler('fortran') }}
+    - git
+    - git-lfs
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config
+  host:
+    - python ${{ python }}
+    - numpy ${{ numpy }}
+    - libblas ${{ libblas }}
+    - boost ${{ boost }}
+    - pip
+    - conda
+    - scipy
+    - matplotlib
+    - sphinx
+    - pytest
+    - pytest-xdist
+    - pytest-cov
+    - ipython
+    - jupyter
+    - scikit-umfpack
+    - seaborn
+    - pandas
+    - numpydoc
+    - jsonpickle
+    - tabulate
+    - docopt-ng
+    - appdirs
+    - h5py
+    - gdal
+    - libgdal
+    - geotiff
+    - hdf5
+    - hdfeos5
+    - gsl
+    - afids-carto
+    - pkg-config
+    - doxygen
+    - swig ${{ swig }}
+    - ncurses
+    - fftw
+    - ptpython
+    - vicar-rtl
+    - vicar-gdalplugin
+    - afids-data
+    - spice
+    - libblitz
+    - graphviz
+    - pynitf
+    # This doesn't build now, and I'm not sure we actually need this. For now just
+    # use opencv, and we can come back to this if needed
+    # Not strictly required, but useful
+    #- opencv-nonfree
+    - opencv
+    # Only needed if we are supporting ISIS
+    - rclone
+  run:
+    - python ${{ python }}
+    - numpy ${{ numpy }}
+    - libblas ${{ libblas }}
+    - boost ${{ boost }}
+    - conda
+    - libnetcdf
+    - gsl
+    - scipy
+    - matplotlib
+    - sphinx
+    - pytest
+    - pytest-xdist
+    - pytest-cov
+    - scikit-umfpack
+    - seaborn
+    - pandas
+    - numpydoc
+    - jsonpickle
+    - tabulate
+    - docopt-ng
+    - h5py
+    - gdal
+    - libgdal
+    - hdf5
+    - hdfeos5
+    - afids-carto
+    - pkg-config
+    - doxygen
+    - swig ${{ swig }}
+    - ncurses
+    - fftw
+    - vicar-rtl
+    - vicar-gdalplugin
+    - afids-data
+    # Not actually needed to run, we already link the .a file in.
+    #- spice
+    - libblitz
+    - graphviz
+    - pynitf
+    # This doesn't build now, and I'm not sure we actually need this. For now just
+    # use opencv, and we can come back to this if needed
+    # Not strictly required, but useful
+    #- opencv-nonfree
+    - opencv
+    # Only needed if we are supporting ISIS
+    - rclone
+    # Not strictly required, but useful to have
+    - ruff
+    - mypy
+    - ipython
+    - jupyterlab
+    - ptpython
+    
+about:
+  license: BSD-3-Clause
+  license_file:
+    - geocal/LICENSE
+  summary: This is a the GeoCal package

@@ -1,0 +1,54 @@
+context:
+  name: itcl
+  version: 4.2.2
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/tcltk/itcl.git
+    tag: itcl-4-2-2
+      
+build:
+  number: 3
+  script:
+    - ./configure --prefix="$PREFIX" --with-tcl="$PREFIX/lib/tkheader" --with-tclinclude="$PREFIX/include" --disable-rpath
+    # For some odd reason, this decides we are on a windows system. Not sure why,
+    # but we just back out the windows part
+    - sed -i "s#dllEntryPoint.[co]##g" Makefile
+    # Also, looks for the .a file in the wrong place, so copy to where
+    # it is looking for this.
+    - cp $PREFIX/lib/libtclstub*.a $PREFIX/lib/tkheader
+    - make -j${CPU_COUNT}
+    - make INSTALL=install install
+
+requirements:
+  build:
+    - ${{ compiler('c') }}  
+    - ${{ compiler('cxx') }}
+    - git
+    - pkg-config 
+    - patch
+    - make
+    # Mac syntax of sed is different, so install the conda/gnu version
+    - if: osx
+      then: sed
+  host:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+  run:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+    
+about:
+  license: LicenseRef-itcl
+  license_file:
+    - license.terms
+  summary: This itcl, a library for Tcl/Tk

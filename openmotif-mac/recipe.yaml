@@ -1,0 +1,85 @@
+# We just use the openmotif package on linux, but this is at least currently not available
+# on osx. We build our own copy, with a different name to make it clear this isn't the standard
+# package. We can remove this if openmotif is ever available on the mac
+context:
+  name: openmotif
+  version: 2.3.8
+
+package:
+  name: openmotif-mac
+  version: ${{ version }}
+
+source:
+  - url: https://downloads.sourceforge.net/project/motif/Motif%20${{ version }}%20Source%20Code/motif-${{ version }}.tar.gz
+
+build:
+  number: 0
+  script:
+    - autoreconf --force --install || true
+    - mkdir build
+    - cd build
+    - ../configure --prefix=$PREFIX --disable-dependency-tracking --disable-silent-rules --enable-jpeg --enable-png --enable-xft --x-includes=$PREFIX/include --x-libraries=$PREFIX/lib --with-freetype-includes=$PREFIX/include --with-freetype-lib=$PREFIX/lib --with-fontconfig-includes=$PREFIX/include --with-fontconfig-lib=$PREFIX/lib --with-libjpeg-includes=$PREFIX/include --with-libjpeg-lib=$PREFIX/lib --with-libpng-includes=$PREFIX/include --with-libpng-lib=$PREFIX/lib CFLAGS="-std=c89 -Wno-strict-prototypes -Wno-incompatible-function-pointer-types $CFLAGS"
+    - make 
+    - make DESTDIR=`pwd`/install/ install
+    - cp -av $SRC_DIR/build/install/$PREFIX/{bin,lib} $PREFIX
+    - rm -f $PREFIX/lib/*.{a,la}
+    - cp -a $SRC_DIR/build/install/$PREFIX/include/* $PREFIX/include
+    - cp -a $SRC_DIR/build/install/$PREFIX/lib/*.a $PREFIX/lib
+    
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config
+    - automake
+    - autoconf
+    - libtool
+  host:
+    - libpng
+    - xorg-libxft
+    - xorg-xproto
+    - freetype
+    - fontconfig
+    - libjpeg-turbo
+    - xorg-renderproto
+    - xorg-kbproto
+    - libexpat
+    - expat
+    - xorg-libxpm
+    - xorg-libxt
+    # Without this constraint, we grab 2.3.9. Isn't clear what the problem is
+    # with this, but on my mac when I try to install I get an error installing
+    # 2.3.9 (xorg-libxft 2.3.9 would require__osx >=14.5, for which no candidates were found.)
+    # Note we are actually on 15.7 version of osx, so I'm not sure what the issue is.
+    # But just avoid this
+    - xorg-libxft == 2.3.8
+    - xorg-xextproto
+    - xorg-libxext
+    - xorg-xbitmaps
+  run:
+    - libpng
+    - xorg-libxft
+    - xorg-xproto
+    - freetype
+    - fontconfig
+    - libjpeg-turbo
+    - xorg-renderproto
+    - xorg-kbproto
+    - libexpat
+    - expat
+    - xorg-libxpm
+    - xorg-libxt
+    - xorg-xextproto
+    - xorg-libxft == 2.3.8
+    - xorg-libxext
+    - xorg-xbitmaps
+    
+about:
+  license: LGPL-2.1-only
+  license_file:
+    - COPYING
+  summary: Motif user interface component toolkit.

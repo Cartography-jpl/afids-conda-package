@@ -1,0 +1,59 @@
+context:
+  name: afids-xvd
+  version: 1.06
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    tag: ${{ version }}
+
+build:
+  number: 0
+  script:
+    - mkdir build
+    - cd build
+    - ../configure --prefix=$PREFIX --with-motif-includes=$PREFIX/include --with-motif-libraries=$PREFIX/lib
+    - make -j$CPU_COUNT all
+    - make install
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config
+  host:
+    - vicar-rtl
+    - vicar
+    - if: osx
+      then: openmotif-mac
+    - if: linux
+      then: openmotif-dev
+    - xorg-xproto
+    - xorg-libxpm
+    - if: osx
+      then: xorg-libxmu
+  run:
+    - vicar-rtl
+    - vicar
+    - if: osx
+      then: openmotif-mac
+    - if: linux
+      then: openmotif
+    - if: osx
+      then: xorg-libxmu
+    
+about:
+  license: BSD-3-Clause
+  license_file:
+    - LICENSE
+  summary: This is the AFIDS version of the XVD program. 
+

@@ -1,0 +1,41 @@
+context:
+  name: vicar-rtl
+  version: 1.11
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    tag: ${{ version }}
+
+build:
+  number: 0
+  script:
+    - ./configure --prefix="$PREFIX"
+    - make -j$CPU_COUNT all
+    - make install
+    - rm -f $PREFIX/lib/libvicar_rtl.la
+    
+requirements:
+  build:
+    - ${{ compiler('c') }}  
+    - ${{ compiler('cxx') }}  
+    - ${{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - pkg-config 
+  host:
+    - ncurses
+  run:
+    - ncurses
+
+about:
+  license: BSD-3-Clause
+  license_file:
+    - LICENSE
+  summary: The VICAR run time library
+

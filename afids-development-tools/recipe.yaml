@@ -1,0 +1,95 @@
+context:
+  name: afids-development-tools
+  version: 1.07
+  
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  # No source, the is a meta package
+
+build:
+  number: 1
+
+requirements:
+  build:
+  host:
+  run:  
+    - ${{ compiler('c') }}  
+    - ${{ compiler('cxx') }}  
+    - ${{ compiler('fortran') }}
+    - python ${{ python }}
+    - numpy ${{ numpy }}
+    - libblas ${{ libblas }}
+    - boost ${{ boost }}
+    - pip
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+    - automake
+    - autoconf
+    - libtool
+    - parallel
+    - scipy
+    - scipy-stubs
+    - matplotlib
+    - sphinx
+    - pytest
+    - pytest-xdist
+    - pytest-cov
+    - scikit-umfpack
+    - seaborn
+    - types-seaborn-stubs
+    - pandas
+    - pandas-stubs
+    - numpydoc
+    - jsonpickle
+    - tabulate
+    - docopt-ng
+    - libnetcdf
+    - gdal
+    - libgdal
+    - geotiff
+    - h5py
+    - hdf5
+    - hdfeos2
+    - hdfeos5
+    - gsl
+    - pkgconfig
+    - doxygen
+    - swig ${{ swig }}
+    - ncurses
+    - fftw
+    - afids-carto
+    - vicar-rtl
+    - vicar-gdalplugin
+    - afids-data
+    - spice
+    - libblitz
+    - graphviz
+    - pynitf
+    - afids-xvd
+    # This doesn't build now, and I'm not sure we actually need this. For now just
+    # use opencv, and we can come back to this if needed
+    # Not strictly required, but useful
+    #- opencv-nonfree
+    - opencv
+    # Not strictly required, but useful to have
+    - ruff
+    - mypy
+    - ipython
+    - jupyterlab
+    - ptpython
+
+about:
+  license: BSD-3-Clause
+  summary: This is a metapackage that installs the tools to build geocal or afids
+  description: |
+    This has everything needed to build afids or geocal, along with a few
+    other useful tools (e.g. opencv). It does not contain geocal, so if
+    you are interested in building afids only you may want to also install
+    the geocal conda package.
+

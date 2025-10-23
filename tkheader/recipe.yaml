@@ -1,0 +1,36 @@
+context:
+  name: tkheader
+  version: 8.6
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - path: ./tk${{ version }}
+    target_directory: tk${{ version }}
+  - path: ./tcl${{ version }}
+    target_directory: tcl${{ version }}
+  - path: ./tkheader
+    target_directory: tkheader
+      
+build:
+  number: 0
+  noarch: generic
+  script:
+    - cp -r tk* tcl* $PREFIX/lib
+    - sed -i "s#REPLACE_ME#$PREFIX/lib#g" $PREFIX/lib/tkheader/tclConfig.sh
+    - sed -i "s#REPLACE_ME#$PREFIX/lib#g" $PREFIX/lib/tkheader/tkConfig.sh
+    - sed -i "s#VERSION#${PKG_VERSION}#g" $PREFIX/lib/tkheader/tclConfig.sh
+    - sed -i "s#VERSION#${PKG_VERSION}#g" $PREFIX/lib/tkheader/tkConfig.sh
+
+requirements:
+  build:
+  host:
+    - tk ~=${{ version }}.0
+  run:
+    - tk ~=${{ version }}.0
+    
+about:
+  license: BSD-3-Clause
+  summary: This the TCL/TK internal header files, needed to build some packages

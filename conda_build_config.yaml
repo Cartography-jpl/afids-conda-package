@@ -1,48 +1,33 @@
 # Build seems to work better if we pin things to be consistent across different
 # builds
 
-# The latest python in 3.12, but there isn't a scikit-umfpack with that version.
-# So hold to slightly older version
-python: 3.11
-
-# Note that conflicts that arise can perhaps be solved by updating
-# need_from_conda_forge.txt and rerunning determine-conda-forge-package.
-
-# A couple of constraints we have from other packages we want to install.
-# Afids doesn't care about these versions, but we need to make sure to grab
-# a set that is consistent
-libiconv: ">=1.17,<2.0a0"
-# Don't think we need this, leave in place a short time until we make sure
-#icu: ">=70.1,<71.0a0"
-
-# One of the dependencies of afids-xvd (xorg-libsm) constrains libuuid
-libuuid: "2.32.1,<3.0a0"
-
-# Constraint on libglx needed for afids-xvd
-libglx: 1.7.0
+# We don't have any particular python requirement, just that it doesn't change from
+# one package to the next. This is the version in dep-test-pixi environment created
+# by make dep-test-env, which is a  consistent set
+python:
+  - ==3.13.7
 
 # Hold numpy fixed. We don't actually have any particular constraint
 # on the numpy version, but we need to have the same one used for all
-# the packages. This version here is what scikit-umfpack 0.3.3 requires
-# We can update this if needed if we are using a new umfpack
-numpy: 1.26.4
+# the packages. 
+numpy:
+  - ==2.3.3
 
-# h5py constrains the hdf version we can use
-hdf5: 1.14.3
+# Any version of blas is fine, however we sometimes run into switching
+# from a openblas to mkl version (build with one, run with the
+# other). Hold this fixed to openblas so we don't have a issue
+libblas:
+  - "* *openblas"
 
-# A lot of package conflicts comes from getting the wrong libgdal package.
-# So we hold this fixed. Note we don't actually require any particular version,
-# just that it doesn't change between build
-gdal:    3.9.2
-libgdal: 3.9.2
-# Version of zstd and hdf5 that gdal grabs. We need to hold this fixed so
-# other things using thest don't conflict. This can be updated to
-# whatever gdal actually uses if we change the gdal package.
-zstd:    1.5.6
-libxml2: 2.12.7
-
-pin_run_as_build:
-    vicar_rtl:
-      max_pin: x.x
-    vicar:
-      max_pin: x.x
+# Swig 4.4.0 just came out, and doesn't seem to work. We'll fix this
+# at some point, but for now restrict ourselves to the older version of swig
+swig:
+  - <4.4.0
+  
+# We don't require a certain boost version, but we do require this to
+# be consistent. It seems like the packages should pin them automatically,
+# but they don't seem to. So we determined a consistent boost version
+# (from dep-test-pixi), and grabbed that version. This can be updated at
+# any time
+boost:
+  - ~= 1.84.0

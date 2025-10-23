@@ -1,0 +1,13 @@
+[workspace]
+authors = ["Mike Smyth <Mike.M.Smyth@jpl.nasa.gov>"]
+channels = ["conda-forge", "/Users/smyth/afids-conda-package/afids-conda-channel"]
+name = "test-pixi"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+afids = ">=1.27,<2"
+afids-development-tools = ">=1.7,<2"
+geocal = ">=20251006,<20251007"

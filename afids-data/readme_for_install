@@ -5,13 +5,12 @@ don't distribute this data as Conda packages because it is too large. Normally
 this is copied somewhere on the system.
 
 You can either replace the directories here with symbolic links to where the
-data is actually located, or you can update the environment variables set in
-$CONDA_PREFIX/etc/conda/activate.d/afids-data-activate.sh with the true
-location of the data.
+data is actually located, or you set conda environment variables e.g. something
+like
+
+conda env config vars set AFIDS_DATA=$PREFIX/data LANDSAT_ROOT=need_to_set ELEV_ROOT=need_to_set CIB1_ROOT=need_to_set CIB5_ROOT=need_to_set AFIDS_VDEV_DATA=$PREFIX/data/vdev SPICEDATA=$PREFIX/data/cspice
 
 Note there is a setup_afids_data.sh script in this directory. If you are
 using Conda (e.g., doing "conda activate <env>") you do *not* need to run
 this setup file. This is there for software that lives outside of conda which
-may want to use the afids data. The automatically run Conda script
-$CONDA_PREFIX/etc/conda/activate.d/afids-data-activate.sh already handles
-the setup.
+may want to use the afids data.

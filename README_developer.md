@@ -4,15 +4,6 @@
 
 We have a top level Makefile that can be used to build all the packages.
 
-## Docker instance
-
-We have had problems when building packages of having them pull out libraries
-that happen to be on the system we were building. GDAL was particulary bad 
-about this, grabbing various system jpeg etc libraries. To give a cleaner
-package creation environment, we use a docker instance to isolate the system.
-This is just a oraclelinux 8 system with miniforge installed, but it prevents 
-anything not on a base oraclelinux 8 system from being used.
-
 ## Channels
 
 We use to the conda-forge channel.
@@ -63,38 +54,25 @@ You only need to build packages if you are in an environment that the prebuilt
 packages don't support (e.g., different version of python), or if you have
 modified something.
 
-There is a src directory where tar files can be placed if desired, which can
-then be used to do a conda build.
-
 Building is just
 
-    conda mambabuild --output-folder afids-conda-channel/ -m conda_build_config.yaml ptpython
+    rattler-build build --output-dir ./afids-conda-channel/ -c conda-forge -c ./afids-conda-channel --recipe vicar-rtl/recipe.yaml
 	
-(or whatever your package list is). You can then install with
-
-    mamba install -c afids-conda-channel ptipython
+Note when creating the recipe that we often need to make small updates to the 
+git repository we are building (e.g., add a flag, fix a warning/error). It is usually
+good to wait to add a tag until we have built on both linux and the mac. So you
+can start using a "rev: \< git_hash \>" ,and then once everything is working add
+and final tag and update the recipe to use a "tag: \< git tag \>".
 	
-Note that you can create a local channel, in its own directory if you like
+(or whatever your package list is). You can then install with, assuming you added the
+path when you created pixi - e.g. 
 
-    conda index <local_dir>
+    pixi init -c conda-forge -c <blahblah>/afids-conda-package/afids-conda-channel <env_dir>
+
+with 
+
+    pixi add vicar-rtl
 	
-This is already run by conda-build, but it can be useful to know how to run
-directly also.
-
-## Creating recipes
-
-We created the recipes by:
-
-    conda skeleton pypi ptipython
-    conda skeleton pypi ptpython	
-
-Then manually edited the meta.yaml to point to local files rather than
-pypi.
-
-For vicar-rtl, manually created file. It is a straight forward configure/make
-cycle, so we can just use a simple template. Note that this is similar to
-what is in the RPM spec file in the vicar-rtl repository.
-
 ## Installing offline
 
 We can create an offline installation of all the dependencies we have.

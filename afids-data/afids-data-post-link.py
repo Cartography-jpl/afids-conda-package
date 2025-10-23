@@ -4,7 +4,7 @@ from __future__ import print_function
 import os
 import re
 
-prefix = os.environ["PREFIX"]
+prefix = os.environ["CONDA_PREFIX"]
 fname = "%s/data/cspice/geocal.ker" % prefix
 t = open(fname).read()
 

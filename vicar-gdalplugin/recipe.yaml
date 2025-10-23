@@ -1,0 +1,53 @@
+context:
+  name: vicar-gdalplugin
+  version: 1.13
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    #tag: ${{ version }}
+    rev: 6bec7043bddcf56fe1a9b21f8c95818c06c3262f
+
+build:
+  number: 0
+  script:
+    - mkdir build
+    - cd build
+    - ../configure --prefix="$PREFIX"
+    - make -j$CPU_COUNT all
+    - make install
+    - rm -f $PREFIX/lib/gdalplugins/gdal_vicar.la
+    - rm -f $PREFIX/lib/gdalplugins/gdal_vicar.a
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - vicar-rtl
+    - libgdal
+    - geotiff
+    - expat
+    - boost ${{ boost }}
+  run:
+    - vicar-rtl 
+    - libgdal
+    - geotiff
+    - expat
+    - boost ${{ boost }}
+
+about:
+  license: BSD-3-Clause
+  license_file:
+    - LICENSE
+  summary: This is a plugin for GDAL to support VICAR files
+

@@ -1,0 +1,45 @@
+context:
+  name: Tix
+  version: 8.4.3
+  file_ext: tar.gz
+
+package:
+  name: tix
+  version: ${{ version }}
+
+source:
+  - url: https://downloads.sourceforge.net/project/tix/tix/${{ version }}/${{ name }}${{ version }}-src.${{ file_ext }}
+    patches:
+      - Tix-generic-sort.patch
+      
+build:
+  number: 4
+  script:
+    - ./configure --enable-threads --prefix="$PREFIX" --x-includes="$PREFIX/include" --x-libraries="$PREFIX/lib" --with-tcl="$PREFIX/lib/tkheader" --with-tk="$PREFIX/lib/tkheader" CPPFLAGS="-I$PREFIX/include" LDFLAGS="-L$PREFIX/lib" CFLAGS="$CFLAGS -Wno-incompatible-pointer-types -Wno-implicit-function-declaration"
+    - make -j${CPU_COUNT}
+    - make install
+
+requirements:
+  build:
+    - ${{ compiler('c') }}  
+    - ${{ compiler('cxx') }}  
+    - pkg-config 
+    - patch
+    - make
+  host:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - xorg-xproto
+    - tk
+    - tkheader
+  run:
+    - xorg-libx11
+    - xorg-libxau
+    - xorg-libxdmcp
+    - tk
+    - tkheader
+    
+about:
+  license: LicenseRef-tix
+  summary: This Tix, a widget library for Tcl/Tk

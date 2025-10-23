@@ -1,0 +1,42 @@
+context:
+  name: joe-editor
+  version: 4.6
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  -
+    url: https://downloads.sourceforge.net/project/joe-editor/JOE%20sources/joe-${{ version }}/joe-${{ version }}.tar.gz
+    patches:
+      - joe-conda.patch
+
+build:
+  number: 3
+  script:
+    - autoreconf --force --install || true
+    - if: osx
+      then: ./configure --prefix=$PREFIX --sysconfdir=$PREFIX/etc CFLAGS="-std=c89 -Wno-strict-prototypes -Wno-incompatible-function-pointer-types $CFLAGS"
+    - if: linux
+      then: ./configure --prefix=$PREFIX --sysconfdir=$PREFIX/etc
+    - make -j$CPU_COUNT
+    - make install
+    - rm -f $PREFIX/lib/*.la || true
+
+requirements:
+  build:
+    - ${{ compiler('c') }} 
+    - patch
+    - make
+    - m4
+    - pkg-config
+    - automake
+    - autoconf
+    - libtool
+  host:
+    - ncurses
+  run:
+    - ncurses
+
+

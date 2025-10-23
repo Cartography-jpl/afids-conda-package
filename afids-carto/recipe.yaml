@@ -1,0 +1,47 @@
+context:
+  name: afids-carto
+  version: 1.06
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Cartography-jpl/${{ name }}.git
+    tag: ${{ version }}
+    #rev: 527fbc76a990ca004c18c090a1c8a5dce6e3d5b8
+
+build:
+  number: 0
+  script:
+    - mkdir build
+    - cd build
+    - ../configure --prefix="$PREFIX"
+    - make -j$CPU_COUNT all
+    - make install
+    - rm -f $PREFIX/lib/libafids-carto.la
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - ${{ compiler('fortran') }}
+    - git
+    - perl
+    - patch
+    - make
+    - m4
+    - pkg-config 
+  host:
+    - gsl
+    - vicar-rtl
+  run:
+    - gsl
+    - vicar-rtl
+
+about:
+  license: BSD-3-Clause
+  license_file:
+    - LICENSE
+  summary: This is the Carto library, which has various utilities used by AFIDS.
+
